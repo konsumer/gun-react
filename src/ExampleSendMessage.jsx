@@ -1,37 +1,52 @@
 // simple example that creates a button & modal to send a message
 
 import { useGun } from './gun-react'
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useState } from 'react'
 
 export default function ExampleSendMessage({ name }) {
   const { gun } = useGun()
   const r = useRef()
   const f = useRef()
+  const [error, errorSet] = useState('')
 
-  const onSend = useCallback(
-    (e) => {
-      e.preventDefault()
-      // for an unmanaged form, I just pull all values
-      const values = Object.fromEntries(new FormData(f.current))
-      if (values.message) {
-        gun.get(name).put(values)
+  const onSend = async (e) => {
+    e.preventDefault()
+    // for an unmanaged form, I just pull all values
+    const values = Object.fromEntries(new FormData(f.current))
+    if (values.message) {
+      try {
+        await gun.get(name).put(values)
         r.current.close()
+      } catch (e) {
+        errorSet(e.message)
       }
-    },
-    [name]
-  )
+    }
+  }
+
+  const onModal = useCallback(() => {
+    errorSet('')
+    r.current.showModal()
+  })
 
   // for an unmanaged form, I don't allow it to submit (via ENTER or whatever)
   const noSubmit = useCallback((e) => e.preventDefault())
 
   return (
     <>
-      <button className='btn' onClick={() => r.current.showModal()}>
+      <button className='btn' onClick={onModal}>
         Send "{name}"
       </button>
       <dialog ref={r} className='modal'>
         <div className='modal-box'>
           <h3 className='font-bold text-lg'>Send "{name}" Message</h3>
+          {!!error && (
+            <div role='alert' className='alert alert-error alert-soft mt-4'>
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6 shrink-0 stroke-current' fill='none' viewBox='0 0 24 24'>
+                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' />
+              </svg>
+              <span>Error! {error}</span>
+            </div>
+          )}
           <p className='py-4'>Press ESC key or click the button below to close. This is just an example, but you can make your form look like whatever you want.</p>
           {/* this is an unmanaged form, but you could also useState and manage everything, if you want */}
           <form ref={f} onSubmit={noSubmit}>
