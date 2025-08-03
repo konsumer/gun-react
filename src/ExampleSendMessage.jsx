@@ -9,7 +9,7 @@ export default function ExampleSendMessage({ name }) {
   const f = useRef()
   const [error, errorSet] = useState('')
 
-  const onSend = async (e) => {
+  const onSend = useCallback(async (e) => {
     e.preventDefault()
     // for an unmanaged form, I just pull all values
     const values = Object.fromEntries(new FormData(f.current))
@@ -21,7 +21,7 @@ export default function ExampleSendMessage({ name }) {
         errorSet(e.message)
       }
     }
-  }
+  })
 
   const onModal = useCallback(() => {
     errorSet('')
