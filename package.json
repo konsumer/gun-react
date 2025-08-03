@@ -1,0 +1,22 @@
+{
+  "name": "gun-react",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "lint": "npx -y prettier -w ."
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-react-swc": "^3.10.2",
+    "daisyui": "^5.0.50",
+    "tailwindcss": "^4.1.11",
+    "vite": "^7.0.4"
+  }
+}
