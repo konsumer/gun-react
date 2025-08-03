@@ -28,9 +28,6 @@ export default function ExampleSendMessage({ name }) {
     r.current.showModal()
   })
 
-  // for an unmanaged form, I don't allow it to submit (via ENTER or whatever)
-  const noSubmit = useCallback((e) => e.preventDefault())
-
   return (
     <>
       <button className='btn' onClick={onModal}>
@@ -49,7 +46,7 @@ export default function ExampleSendMessage({ name }) {
           )}
           <p className='py-4'>Press ESC key or click the button below to close. This is just an example, but you can make your form look like whatever you want.</p>
           {/* this is an unmanaged form, but you could also useState and manage everything, if you want */}
-          <form ref={f} onSubmit={noSubmit}>
+          <form ref={f} onSubmit={onSend}>
             <fieldset className='fieldset'>
               <legend className='fieldset-legend'>What is your message?</legend>
               <input type='text' className='input' placeholder='Type here' required name='message' />
